@@ -32,26 +32,27 @@
           </button>
         </div>
         <div class="modal-body">
-            <form action="{{ route('exam.create') }}" id="makeQuest">
+            <form method="POST" action="{{ route('exam.create') }}" id="makeQuest">
+                @csrf
                 <div class="form-group">
                   <label for="exampleFormControlInput1">Question</label>
-                  <input type="text" name="question" class="form-control" id="exampleFormControlInput1" placeholder="What is an API?">
+                  <input type="text" name="question" class="form-control" id="exampleFormControlInput1" placeholder="What is an API?" required>
                 </div>
                 <div class="form-group">
                     <label for="exampleFormControlInput1">Option 1</label>
-                    <input type="text" name="option_1" class="form-control" id="exampleFormControlInput1" placeholder="I dont know">
+                    <input type="text" name="option_1" class="form-control" id="exampleFormControlInput1" placeholder="I dont know" required>
                   </div>
                   <div class="form-group">
                     <label for="exampleFormControlInput1">Option 2</label>
-                    <input type="text" name="option_2" class="form-control" id="exampleFormControlInput1" placeholder="I dont know">
+                    <input type="text" name="option_2" class="form-control" id="exampleFormControlInput1" placeholder="I dont know" required>
                   </div>
                   <div class="form-group">
                     <label for="exampleFormControlInput1">Option 3</label>
-                    <input type="text" name="option_3" class="form-control" id="exampleFormControlInput1" placeholder="I dont know">
+                    <input type="text" name="option_3" class="form-control" id="exampleFormControlInput1" placeholder="I dont know" required>
                   </div>
                   <div class="form-group">
                     <label for="exampleFormControlInput1">Option 4</label>
-                    <input type="text" name="option_4" class="form-control" id="exampleFormControlInput1" placeholder="I dont know">
+                    <input type="text" name="option_4" class="form-control" id="exampleFormControlInput1" placeholder="I dont know" required>
                   </div>
                 <div class="form-group">
                   <label for="exampleFormControlSelect1">Category</label>
@@ -73,5 +74,27 @@
 </div>
 @endsection
 @section('script')
-    @include('SCRIPTS.script')
+<script>
+    $('form#makeQuest').on('submit', function (e) {
+        e.preventDefault();
+        let form = $(this);
+        let url = form.attr('action');
+        let data = $(this).serialize();
+        axios.post(url, data)
+            .then(function (response) {
+                if (response.data.success == true) {
+                    $('#exampleModal').modal('hide');
+                    $('#makeQuest')[0].reset();
+                } else {
+                    console.log(response.data.message)
+                }
+            })
+            .catch(function (error) {
+                console.log(error)
+
+            });
+    });
+
+
+    </script>
 @endsection

@@ -23,7 +23,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::prefix('exam')->as('exam.')->group(function () {
     Route::get('/', [App\Http\Controllers\ExamController::class, 'index'])->name('index');
-    Route::post('/', [App\Http\Controllers\ExamController::class, 'store'])->name('create');
+    Route::post('/create', [App\Http\Controllers\ExamController::class, 'store'])->name('create');
     Route::post('/{id}', [App\Http\Controllers\ExamController::class, 'show'])->name('show');
     Route::post('/{id}', [App\Http\Controllers\ExamController::class, 'edit'])->name('edit');
     Route::post('/id', [App\Http\Controllers\ExamController::class, 'store'])->name('destroy');

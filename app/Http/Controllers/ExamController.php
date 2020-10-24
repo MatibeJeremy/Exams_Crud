@@ -8,18 +8,13 @@ use App\Models\exam;
 
 class ExamController extends Controller
 {
-    /**
-     * @var
-     */
-    protected $user;
 
     /**
-     * TransactionController constructor.
+     * ExamController constructor.
      */
     public function __construct()
     {
-        $this->user = auth()->user();
-
+        $this->middleware('auth')->only('index');
     }
 
      /**
@@ -52,7 +47,6 @@ class ExamController extends Controller
      */
     public function store(Request $request){
         $exam_input = $request->all();
-
         $validator = Validator::make($exam_input, [
             'question' => 'required',
             'option_1' => 'required',
@@ -74,18 +68,16 @@ class ExamController extends Controller
 
          // create exam
          $exam = new exam();
-         $exam->question = $exam_input['amount'];
+         $exam->question = $exam_input['question'];
          $exam->option_1 = $exam_input['option_1'];
          $exam->option_2 = $exam_input['option_2'];
          $exam->option_3 = $exam_input['option_3'];
          $exam->option_4 = $exam_input['option_4'];
          $exam->category = $exam_input['category'];
 
-         return response()->json([
-            'data' => $exam,
-            'message' => 'Successfully made exam.',
-            'status' => 'Success'
-        ], 201);
+         $exam->save();
+
+         return view('layouts.index');
     }
 
     /**
