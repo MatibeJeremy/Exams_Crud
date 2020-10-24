@@ -27,6 +27,21 @@ class ExamController extends Controller
         return view('layouts.index');
     }
 
+    /***
+     * List all Exams with Technical Category
+     * @return Response
+     */
+    public function filterL(){
+        $exams = exam::where('category', 'logical');
+
+        return response()->json([
+            'data'=> $exams,
+            'message'=>'Loaded Technical exams successfully.',
+            'status'=>'success'
+        ], 200);
+
+    }
+
     /**
      * Used when you want to show a single resource
      * @return mixed

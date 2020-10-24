@@ -7,6 +7,16 @@
 <button type="button" class="btn btn-warning" style="position: absolute; left: 80%; top: 5px; border-radius: 20px" data-toggle="modal" data-target="#exampleModal">
     Add Question
   </button>
+  <div class="btn-group">
+    <button type="button" style="top:5px" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Filter Exam Categories
+    </button>
+    <div class="dropdown-menu dropdown-menu-right">
+      <button class="dropdown-item" type="button">Technical</button>
+      <button class="dropdown-item" type="button">Aptitude</button>
+      <button id="logical" class="dropdown-item" type="button">Logical</button>
+    </div>
+  </div>
   <div class="card" style="width: 45rem; top: 60px; border-radius:20px">
     <div class="card-body">
       <h5 class="card-title">No: </h5>
@@ -30,6 +40,7 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
+
         </div>
         <div class="modal-body">
             <form method="POST" action="{{ route('exam.create') }}" id="makeQuest">
@@ -75,6 +86,7 @@
 @endsection
 @section('script')
 <script>
+
     $('form#makeQuest').on('submit', function (e) {
         e.preventDefault();
         let form = $(this);
@@ -94,6 +106,21 @@
 
             });
     });
+
+    $('#logical').on('click', function (e) {
+        e.preventDefault();
+        let data = 'technical';
+        axios.post("{{ route('exam.logical') }}", data)
+            .then(function (response) {
+                console.log(response)
+            })
+            .catch(function (error) {
+                console.log(error)
+
+            });
+    });
+
+
 
 
     </script>
