@@ -25,8 +25,8 @@ Route::prefix('exam')->as('exam.')->group(function () {
     Route::get('/', [App\Http\Controllers\ExamController::class, 'index'])->name('index');
     Route::post('/create', [App\Http\Controllers\ExamController::class, 'store'])->name('create');
     Route::post('/filterL', [App\Http\Controllers\ExamController::class, 'filterL'])->name('logical');
-    Route::post('/{id}', [App\Http\Controllers\ExamController::class, 'show'])->name('show');
-    Route::post('/{id}', [App\Http\Controllers\ExamController::class, 'edit'])->name('edit');
-    Route::post('/id', [App\Http\Controllers\ExamController::class, 'store'])->name('destroy');
+    Route::put('/{id}', [App\Http\Controllers\ExamController::class, 'edit'])->name('edit');
+    Route::post('/{id}', [App\Http\Controllers\ExamController::class, 'destroy'])->name('delete');
+
 });
 

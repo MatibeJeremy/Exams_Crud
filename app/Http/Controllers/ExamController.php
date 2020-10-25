@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\exam;
+use Facade\FlareClient\Http\Response;
+use App\Http\Resources\examResource;
+use Illuminate\Support\Facades\DB;
 
 class ExamController extends Controller
 {
@@ -24,22 +27,33 @@ class ExamController extends Controller
      */
     public function index()
     {
-        return view('layouts.index');
+        $exam = exam::all();
+        $exams = ['exams' => $exam];
+        return view('layouts.index', $exams );
+    }
+
+    /***
+     * List all Exams with Logical Category
+     * @return Response
+     */
+    public function filterL(){
+        $exams = exam::where('category', 'logical')->get();
+
+        $data = array($exams);
+
+        return view('layouts.filter', ['exams'=>$exams]);
     }
 
     /***
      * List all Exams with Technical Category
      * @return Response
      */
-    public function filterL(){
-        $exams = exam::where('category', 'logical');
+    public function filterT(){
+        $exams = exam::where('category', 'technical')->get();
 
-        return response()->json([
-            'data'=> $exams,
-            'message'=>'Loaded Technical exams successfully.',
-            'status'=>'success'
-        ], 200);
+        $data = array($exams);
 
+        return view('layouts.technical', ['exams'=>$exams]);
     }
 
     /**
@@ -92,7 +106,7 @@ class ExamController extends Controller
 
          $exam->save();
 
-         return view('layouts.index');
+         return view('home');
     }
 
     /**
@@ -101,19 +115,23 @@ class ExamController extends Controller
         * @param  int  $id
         * @return Response
         */
-        public function edit($id)
+        public function edit(Request $request, Exam $exam)
         {
-            $exam = exam::where('id', '=', $id)->first();
+            request()->validate([
+                'question' => 'required',
+                'option_1' => 'required',
+                'option_2' => 'required',
+                'option_3' => 'required',
+                'option_4' => 'required',
+                'category' => 'required',
+            ]);
 
-            $$exam->update($request->all());
-
-            return response()->json([
-                'message'=>'Updated exam successfully.',
-                'status'=>'success'
-            ], 200);
+            $exam->update($request->all());
 
 
+            return ('home');
         }
+
 
     /**
         * Remove the specified resource from storage.
@@ -124,10 +142,7 @@ class ExamController extends Controller
     public function destroy($id){
         exam::destroy($id);
 
-        return response()->json([
-            'message'=>'Deleted exam successfully.',
-            'status'=>'success'
-        ], 200);
+        return view('home');
     }
 
 
