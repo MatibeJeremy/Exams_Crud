@@ -115,9 +115,9 @@ class ExamController extends Controller
         * @param  int  $id
         * @return Response
         */
-        public function edit(Request $request, Exam $exam)
+        public function edit(Request $request, $id)
         {
-            request()->validate([
+            $fields = request()->validate([
                 'question' => 'required',
                 'option_1' => 'required',
                 'option_2' => 'required',
@@ -126,10 +126,10 @@ class ExamController extends Controller
                 'category' => 'required',
             ]);
 
-            $exam->update($request->all());
+            exam::where('id', $id)->update($fields);
 
 
-            return ('home');
+            return view('home');
         }
 
 
